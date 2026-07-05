@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PayID</title>
+<style>
+  :root {
+    /* ===== EDIT THESE ===== */
+    --name: "Ronan Donahoe";
+    --payid: "0473 744 819";
+    --note: "Thanks for your support!";
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #0d0d12;
+    color: #f2f2f5;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .card {
+    background: #1a1a22;
+    border: 1px solid #2a2a35;
+    border-radius: 24px;
+    padding: 40px 32px;
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .badge {
+    display: inline-block;
+    background: #2563eb;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 28px;
+  }
+  .label {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #8a8a99;
+    margin-bottom: 8px;
+  }
+  .name { font-size: 24px; font-weight: 700; margin-bottom: 28px; }
+  .payid {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin-bottom: 24px;
+    word-break: break-word;
+  }
+  .copy-btn {
+    width: 100%;
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .copy-btn:active { background: #1d4ed8; }
+  .copy-btn.copied { background: #16a34a; }
+  .note {
+    margin-top: 28px;
+    font-size: 15px;
+    color: #a0a0ad;
+    line-height: 1.5;
+  }
+  .hint { margin-top: 16px; font-size: 12px; color: #55555f; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <span class="badge">PayID</span>
+    <div class="label">Pay to</div>
+    <div class="name" id="name"></div>
+    <div class="label">PayID (mobile)</div>
+    <div class="payid" id="payid"></div>
+    <button class="copy-btn" id="copyBtn">Copy PayID</button>
+    <div class="note" id="note"></div>
+    <div class="hint">Open your banking app &rarr; Pay someone &rarr; PayID</div>
+  </div>
+
+<script>
+  // Read the values from the CSS variables above
+  const styles = getComputedStyle(document.documentElement);
+  const strip = v => v.trim().replace(/^["']|["']$/g, '');
+  const name  = strip(styles.getPropertyValue('--name'));
+  const payid = strip(styles.getPropertyValue('--payid'));
+  const note  = strip(styles.getPropertyValue('--note'));
+
+  document.getElementById('name').textContent  = name;
+  document.getElementById('payid').textContent = payid;
+  document.getElementById('note').textContent  = note;
+  document.title = name + ' – PayID';
+
+  const btn = document.getElementById('copyBtn');
+  btn.addEventListener('click', () => {
+    const value = payid.replace(/\s+/g, ''); // copy without spaces
+    navigator.clipboard.writeText(value).then(() => {
+      btn.textContent = 'Copied ✓';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy PayID'; btn.classList.remove('copied'); }, 2000);
+    }).catch(() => {
+      btn.textContent = value; // fallback: show it so they can copy manually
+    });
+  });
+</script>
+</body>
+</html>
